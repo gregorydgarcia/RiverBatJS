@@ -1,35 +1,40 @@
+//Token must be declared at top
 L.mapbox.accessToken = 'pk.eyJ1IjoiZ3JlZ29yeWRnYXJjaWEiLCJhIjoiNGRMNU13NCJ9.eYlvRKV4vrpXMGBPAs_Amw';
 
-//global namespace
-Bat = {
-    map: L.mapbox.map('map', 'gregorydgarcia.m187akkn'),
+//NAMESPACE
+var BAT = BAT || {};
+
+
+BAT.map = L.mapbox.map('map', 'gregorydgarcia.m187akkn');
+BAT.modules = {};
+BAT.init = {};
+BAT.control = {};
+
+
+BAT.handleFile = function(evt){
     
-    control: L.control.layers({
-    'Topology': L.mapbox.tileLayer('gregorydgarcia.m187akkn').addTo(map),
-    'Satellite': L.mapbox.tileLayer('gregorydgarcia.m189o9m3'),
-    'Grey Scale': L.mapbox.tileLayer('gregorydgarcia.m18a0neh')}, {}),
-
-
-
-
-
-
-
-
-    init: function (){
-        //MAP INIT
-        Bat.map.setView([51.513333, -0.136667], 16);
-        
-        //FULL SCREEN
-        L.control.fullscreen().addTo(map);
-
-        //GEOCOVER
-        L.Control.geocoder().addTo(map);
-
-        // CONTROL INIT
-        }
-
+          var files = evt.target.files, // FileList object
+                  f = files[0],
+             reader = new FileReader();
+      
+      // Closure to capture the file information.
+      reader.onload = (function (theFile) {
+          return function (e) { 
+              var JsonObj = e.target.result,
+                  parsedJSON = JSON.parse(JsonObj);
+              console.log(parsedJSON);
+          };
+      })(f);
+      
+      // Read in JSON as a data URL.
+      reader.readAsText(f, 'UTF-8');
 }
 
-Bat.init();
-Bat.control.addTo(map);
+//INIT
+(function() {
+    BAT.map.setView([51.513333, -0.136667], 16);
+
+    //GEOCODER
+    L.Control.geocoder().addTo(BAT.map);
+}());
+
